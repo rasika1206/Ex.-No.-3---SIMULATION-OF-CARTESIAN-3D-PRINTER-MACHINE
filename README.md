@@ -1,141 +1,68 @@
-# Linux-IPC-Shared-memory
-Ex06-Linux IPC-Shared-memory
+# Ex. No.3 - SIMULATION-OF-CARTESIAN-3D-PRINTER-MACHINE
+### DATE: 
 
-# AIM:
-To Write a C program that illustrates two processes communicating using shared memory.
+## AIM:
+### To simulate the construction of cartesian 3D printer and to get in-depth knowledge of mechatronics of cartesian 3D printers.
 
-# DESIGN STEPS:
+![image](https://github.com/Sellakumar1987/Ex.-No.-3---SIMULATION-OF-CARTESIAN-3D-PRINTER-MACHINE/assets/113594316/69572917-1257-45d7-bf57-ff48a6e5a711)
 
-### Step 1:
+## REQUIREMENTS:
+### ●	System - Windows 7 or higher, 1 GB RAM.
 
-Navigate to any Linux environment installed on the system or installed inside a virtual environment like virtual box/vmware or online linux JSLinux (https://bellard.org/jslinux/vm.html?url=alpine-x86.cfg&mem=192) or docker.
+## PROCEDURE:
+### For X-Axis Assembly
+###   1.	Select X-Axis Assembly from the visible list.
+###   2.	All the parts related to X-Axis will be shown on the screen.
+###   3.	Select the parts in sequence in which they are shown.
+###   4.	When the first part is selected then it will open in the blank space in the left side of the screen.
+###   5.	Further, when the correct part will be selected then it will get assembled with the previously selected part/parts.
+###   6.	If the user follows an incorrect sequence then a pop-up will appear on the screen showing the name of the part to be selected.
 
-### Step 2:
+## For Y-Axis Assembly
+###   1.	Select Y-Axis Assembly from the visible list.
+###   2.	All the parts related to Y-Axis will be shown on the screen.
+###   3.	Select the parts in sequence in which they are shown.
+###   4.	When the first part is selected then it will open in the blank space in the left side of the screen.
+###   5.	Further, when the correct part will be selected then it will get assembled with the previously selected part/parts.
+###   6.	If the user follows an incorrect sequence then a pop-up will appear on the screen showing the name of the part to be selected.
 
-Write the C Program using Linux Process API - Shared Memory
+## For Z-Axis Assembly
+###   1.	Select Z-Axis Assembly from the visible list.
+###   2.	All the parts related to Z-Axis will be shown on the screen.
+###   3.	Select the parts in sequence in which they are shown.
+###   4.	When the first part is selected then it will open in the blank space in the left side of the screen.
+###   5.	Further, when the correct part will be selected then it will get assembled with the previously selected part/parts.
+###   6.	If the user follows an incorrect sequence then a pop-up will appear on the screen showing the name of the part to be selected.
 
-### Step 3:
+## For Complete-Axis Assembly
+###   1.	Select Complete-Axis Assembly from the visible list.
+###   2.	All the parts related to Complete-Axis will be shown on the screen.
+###   3.	Select the parts in sequence in which they are shown.
+###   4.	When the first part is selected then it will open in the blank space in the left side of the screen.
+###   5.	Further, when the correct part will be selected then it will get assembled with the previously selected part/parts.
+###   6.	If the user follows an incorrect sequence then a pop-up will appear on the screen showing the name of the part to be selected.
 
-Execute the C Program for the desired output. 
-
-# PROGRAM:
-```
-Developed By: RASIKA M
-
-Reg No:212222230117
-```
-## Write a C program that illustrates two processes communicating using shared memory.
-```
-//shm.c
-
-#include<unistd.h> 
-#include<stdlib.h> 
-#include<stdio.h> 
-#include<string.h>
-#include<sys/shm.h>
-#define TEXT_SZ 2048 
-struct shared_use_st{
-int written_by_you;
-char some_text[TEXT_SZ];
-};
-int main()
-{
-int running =1;
-void *shared_memory = (void *)0; 
-struct shared_use_st *shared_stuff; 
-char buffer[BUFSIZ];
-int shmid;
-shmid	=shmget(	(key_t)1234,	sizeof(struct shared_use_st), 0666 | IPC_CREAT);
-printf("Shared memort id = %d \n",shmid);
-if (shmid == -1)
-{
-fprintf(stderr, "shmget failed\n"); exit(EXIT_FAILURE);
-}
-shared_memory=shmat(shmid, (void *)0, 0);
-if (shared_memory == (void *)-1){
-fprintf(stderr,	"shmat	failed\n"); exit(EXIT_FAILURE);}
-printf("Memory Attached at %x\n", (int) shared_memory); 
-shared_stuff = (struct shared_use_st *)shared_memory; 
-while(running)
-{
-while(shared_stuff->written_by_you== 1)
-{
-sleep(1);
-printf("waiting for client.	\n");
-}
-printf("Enter Some Text: "); fgets (buffer, BUFSIZ, stdin);
-strncpy(shared_stuff->some_text, buffer, TEXT_SZ);
-shared_stuff->written_by_you = 1;
-if(strncmp(buffer, "end", 3) == 0){
-running = 0;}}
-if (shmdt(shared_memory) == -1)
-{
-fprintf(stderr, "shmdt failed\n"); exit(EXIT_FAILURE);
-} exit(EXIT_SUCCESS);
-}
-
-
-
-//shmry2.c
-
-#include<unistd.h> 
-#include<stdlib.h> 
-#include<stdio.h> 
-#include<string.h>
-#include<sys/shm.h>
-#define TEXT_SZ 2048 
-struct shared_use_st{
-int written_by_you;
-char some_text[TEXT_SZ];
-};
-int main()
-{
-int running =1;
-void *shared_memory = (void *)0; 
-struct shared_use_st *shared_stuff; 
-char buffer[BUFSIZ];
-int shmid;
-shmid	=shmget(	(key_t)1234,	sizeof(struct shared_use_st), 0666 | IPC_CREAT);
-printf("Shared memort id = %d \n",shmid);
-if (shmid == -1)
-{
-fprintf(stderr, "shmget failed\n"); exit(EXIT_FAILURE);
-}
-shared_memory=shmat(shmid, (void *)0, 0);
-if (shared_memory == (void *)-1){
-fprintf(stderr,	"shmat	failed\n"); exit(EXIT_FAILURE);}
-printf("Memory Attached at %x\n", (int) shared_memory); 
-shared_stuff = (struct shared_use_st *)shared_memory; 
-while(running)
-{
-while(shared_stuff->written_by_you== 1)
-{
-sleep(1);
-printf("waiting for client.	\n");
-}
-printf("Enter Some Text: "); fgets (buffer, BUFSIZ, stdin);
-strncpy(shared_stuff->some_text, buffer, TEXT_SZ);
-shared_stuff->written_by_you = 1;
-if(strncmp(buffer, "end", 3) == 0){
-running = 0;}}
-if (shmdt(shared_memory) == -1)
-{
-fprintf(stderr, "shmdt failed\n"); exit(EXIT_FAILURE);
-} exit(EXIT_SUCCESS);
-}
-
-```
-
-
-
+## Playing with Axes
+###   1.	Move the x-axis slider or enter the value (within the given range) in the given text box and press/select ENTER. Now observe the movement of the x-axis assembly.
+###   2.	Move the y-axis slider or enter the value (within the given range) in the given text box and press/select ENTER. Now observe the movement of the y-axis assembly.
+###   3.	Move the z-axis slider or enter the value (within the given range) in the given text box and press/select ENTER. Now observe the movement of the z-axis assembly.
 
 ## OUTPUT
+![image](https://github.com/Sellakumar1987/Ex.-No.-3---SIMULATION-OF-CARTESIAN-3D-PRINTER-MACHINE/assets/113594316/3b394ffa-4aea-4e56-a12b-eccab47afee5)
 
-![319117641-388a0d8f-b4af-43d0-a08a-92cb7188ec14](https://github.com/sabithapaulraj/Linux-IPC-Shared-memory/assets/118343379/09a6887d-9efa-4f6c-b0f1-cebfbf92ea6d)
+![image](https://github.com/Sellakumar1987/Ex.-No.-3---SIMULATION-OF-CARTESIAN-3D-PRINTER-MACHINE/assets/113594316/cf47ce68-c7b4-4cbc-b57f-ccd68b7bcbb7)
 
-![319117771-96e1d580-58c9-4c90-a704-a1d0f5cca281](https://github.com/sabithapaulraj/Linux-IPC-Shared-memory/assets/118343379/88576617-5f52-4771-b06a-23c88a146bf7)
+![image](https://github.com/Sellakumar1987/Ex.-No.-3---SIMULATION-OF-CARTESIAN-3D-PRINTER-MACHINE/assets/113594316/803397cb-5685-4bc2-82c2-6b1d1e3a2eec)
 
+![image](https://github.com/Sellakumar1987/Ex.-No.-3---SIMULATION-OF-CARTESIAN-3D-PRINTER-MACHINE/assets/113594316/45ac4da8-f236-4e23-b0ce-a77aac6ac8b0)
 
+![image](https://github.com/Sellakumar1987/Ex.-No.-3---SIMULATION-OF-CARTESIAN-3D-PRINTER-MACHINE/assets/113594316/e00b82b4-9aff-400f-9c57-288254dc3cd2)
 
-# RESULT:
-The program is executed successfully.
+## Output:
+![275325576-850ae77c-e05b-4eb4-8b46-d21595b6bdc4](https://github.com/charumathiramesh/Ex.-No.-3---SIMULATION-OF-CARTESIAN-3D-PRINTER-MACHINE/assets/120204455/4fcd6c07-7ae1-4f60-9a63-964cb7005c42)
+
+### Name: RASIKA M
+### Register Number: 212222230117
+
+## Result: 
+### Thus the simulation on construction of cartesian 3D printer is completed & movement of axis along X, Y, & Z has been studied.
